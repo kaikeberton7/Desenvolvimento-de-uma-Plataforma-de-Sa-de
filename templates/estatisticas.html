@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Estatísticas{% endblock %}
+{% block content %}
+    <h2>Estatísticas</h2>
+    <ul>
+        <li><b>Número total de pacientes:</b> {{ total }}</li>
+        <li><b>Idade média dos pacientes:</b> {{ media|round(2) }}</li>
+        <li><b>Paciente mais novo:</b> {% if mais_novo %}{{ mais_novo['nome'] }} ({{ mais_novo['idade'] }} anos){% else %}N/A{% endif %}</li>
+        <li><b>Paciente mais velho:</b> {% if mais_velho %}{{ mais_velho['nome'] }} ({{ mais_velho['idade'] }} anos){% else %}N/A{% endif %}</li>
+    </ul>
+    <h3>Gráfico de idades</h3>
+    {% if pacientes %}
+        <div style="height:260px; max-width:100%;">
+            <canvas id="idadeChart"></canvas>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const labels = [{% for p in pacientes %}'{{ p['nome']|escape }}'{% if not loop.last %}, {% endif %}{% endfor %}];
+            const data = [{% for p in pacientes %}{{ p['idade'] }}{% if not loop.last %}, {% endif %}{% endfor %}];
+            const ctx = document.getElementById('idadeChart').getContext('2d');
+            const maxVal = data.length ? Math.max(...data) : 0;
+            const suggestedMax = Math.ceil((maxVal + 5) / 5) * 5; // round up to next multiple of 5
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Idade (anos)',
+                        data: data,
+                        backgroundColor: 'rgba(3,169,244,0.78)',
+                        borderColor: 'rgba(3,169,244,1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 3.6,
+                    elements: {
+                        bar: { borderRadius: 6, maxBarThickness: 36, barPercentage: 0.6, categoryPercentage: 0.6 }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, suggestedMax: suggestedMax, ticks: { stepSize: 5 } },
+                        x: { ticks: { autoSkip: false, maxRotation: 45, minRotation: 0 } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { mode: 'index', intersect: false }
+                    }
+                }
+            });
+        </script>
+    {% else %}
+        <p class="msg-error">Sem dados para gerar o gráfico.</p>
+    {% endif %}
+    <a href="/">Voltar ao menu</a>
+{% endblock %}

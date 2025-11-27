@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}Agendamento{% endblock %}
+{% block content %}
+    <h2>Agendamento</h2>
+    {% if mensagem %}
+        {% if mensagem == 'Indisponibilidade de médico neste horário. Não é possível agendar.' %}
+            <p class="msg-error">{{ mensagem }}</p>
+        {% else %}
+            <p class="msg-success">{{ mensagem }}</p>
+        {% endif %}
+    {% endif %}
+
+    {% if session.get('role') != 'medico' %}
+        <h3>Novo agendamento</h3>
+        <form method="post">
+            <label>Paciente:</label><br>
+            <select name="paciente" required>
+                <option value="">-- selecione --</option>
+                {% for p in pacientes %}
+                    <option value="{{ p|escape }}">{{ p }}</option>
+                {% endfor %}
+            </select><br>
+            <label>Data e hora:</label><br>
+            <input type="datetime-local" name="data_hora" required><br>
+            <input type="submit" name="agendar" value="Agendar">
+        </form>
+    {% endif %}
+
+    <h3>Agendamentos</h3>
+    {% if session.get('role') != 'medico' %}
+        <div style="margin-bottom:12px;">
+            <form method="get" style="display:inline-block; margin-right:12px;">
+                <label for="dia">Pesquisar por data:</label>
+                <input type="date" id="dia" name="dia" value="{{ filter_day if filter_day is defined else '' }}">
+                <input type="submit" value="Pesquisar">
+            </form>
+            <a href="{{ url_for('agendamento') }}">Mostrar todos</a>
+        </div>
+    {% endif %}
+    {% if agendamentos %}
+        <table>
+            <tr><th>ID</th><th>Paciente</th><th>Data/Hora</th><th>Status</th>{% if session.get('role') != 'medico' %}<th>Ações</th>{% endif %}</tr>
+            {% for a in agendamentos %}
+                <tr>
+                    <td>{{ a.id }}</td>
+                    <td>{{ a.paciente }}</td>
+                    <td>{{ format_datetime(a.data_hora) }}</td>
+                    <td>{{ a.status }}</td>
+                    {% if session.get('role') != 'medico' %}
+                    <td>
+                        {% if a.status != 'confirmado' %}
+                        <form method="post" style="display:inline">
+                            <button name="confirmar" value="{{ a.id }}">Confirmar</button>
+                        </form>
+                        {% endif %}
+                        {% if a.status != 'cancelado' %}
+                        <form method="post" style="display:inline">
+                            <button name="cancelar" value="{{ a.id }}">Cancelar</button>
+                        </form>
+                        {% endif %}
+                        <form method="post" style="display:inline" onsubmit="return confirm('Deseja realmente apagar este agendamento? Esta ação não pode ser desfeita.');">
+                            <button name="apagar" value="{{ a.id }}">Apagar</button>
+                        </form>
+                    </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p class="msg-error">Nenhum agendamento.</p>
+    {% endif %}
+
+    <!-- Barra de atalhos inferior -->
+    <div style="margin-top:32px; padding:16px 0; border-top:1px solid #e0e0e0; display:flex; gap:18px; justify-content:center; background:rgba(3,169,244,0.04);">
+        <a href="{{ url_for('cadastrar') }}" class="btn-atalho">Cadastrar Paciente</a>
+        <a href="{{ url_for('fila_atendimento') }}" class="btn-atalho">Ver Fila</a>
+        <a href="{{ url_for('listar') }}" class="btn-atalho">Listar Pacientes</a>
+    </div>
+    <style>
+        .btn-atalho { background:#03a9f4; color:#fff; padding:10px 22px; border-radius:8px; text-decoration:none; font-weight:600; box-shadow:0 2px 8px rgba(3,169,244,0.08); transition:background 0.2s; }
+        .btn-atalho:hover { background:#01579b; }
+    </style>
+    <!-- Menu superior já possui navegação -->
+{% endblock %}

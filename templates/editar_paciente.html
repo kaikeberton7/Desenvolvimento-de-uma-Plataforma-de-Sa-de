@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Editar Paciente{% endblock %}
+{% block content %}
+  <h2>Editar Paciente</h2>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul>
+      {% for category, message in messages %}
+        <li class="msg-{{ category }}">{{ message }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  <form method="post">
+    <label>Nome:</label><br>
+    <input type="text" name="nome" value="{{ paciente.nome }}" required><br>
+    <label>Idade:</label><br>
+    <input type="number" name="idade" min="0" value="{{ paciente.idade }}" required><br>
+    <label>DDD (2 dígitos):</label><br>
+    {% set d_match = paciente.telefone | replace('(', '') | replace(')', '') | replace(' ', '') %}
+    {% set ddd_val = d_match[:2] if d_match|length >= 2 else '' %}
+    {% set phone_val = d_match[2:] if d_match|length > 2 else '' %}
+    <input type="text" name="ddd" maxlength="2" pattern="\d{2}" title="Digite 2 dígitos" required style="width:60px;" value="{{ ddd_val }}"><br>
+    <label>Telefone (9 dígitos):</label><br>
+    <input type="text" name="telefone_num" maxlength="9" pattern="\d{9}" title="Digite 9 dígitos sem espaços" required value="{{ phone_val }}"><br>
+    <label>CPF:</label><br>
+    <input type="text" name="cpf" maxlength="14" required value="{{ paciente.cpf if paciente.cpf is defined else '' }}"><br>
+    <label>RG:</label><br>
+    <input type="text" name="rg" maxlength="15" value="{{ paciente.rg if paciente.rg is defined else '' }}"><br>
+    <input type="submit" value="Salvar">
+    <a href="{{ url_for('cadastrar') }}" class="btn btn-secondary">Cancelar</a>
+  </form>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block title %}Cadastrar Paciente{% endblock %}
+{% block content %}
+    <h2>Cadastrar Paciente</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% set shown = [] %}
+        <ul>
+        {% for category, message in messages %}
+          {% if message not in shown %}
+            <li class="msg-{{ category }}">{{ message }}</li>
+            {% set _ = shown.append(message) %}
+          {% endif %}
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <form method="post">
+      <label>Nome:</label><br>
+      <input type="text" name="nome" required><br>
+      <label>Idade:</label><br>
+      <input type="number" name="idade" min="0" max="999" maxlength="3" required style="width:44px;text-align:center;font-size:0.95rem;" oninput="if(this.value.length>3)this.value=this.value.slice(0,3)"><br>
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+        <div>
+          <label for="ddd">DDD:</label><br>
+          <input type="text" id="ddd" name="ddd" maxlength="2" pattern="\d{2}" title="Digite 2 dígitos" required style="width:38px;text-align:center;font-size:0.95rem;" placeholder="99">
+        </div>
+        <div>
+          <label for="telefone_num">Telefone:</label><br>
+          <input type="text" id="telefone_num" name="telefone_num" maxlength="9" pattern="\d{9}" title="Digite 9 dígitos sem espaços" required style="width:90px;text-align:center;font-size:0.95rem;" placeholder="999999999">
+        </div>
+      </div>
+      <label>CPF (somente números):</label><br>
+      <input type="text" name="cpf" id="cpf" maxlength="14" placeholder="000.000.000-00" title="Digite CPF" required oninput="mascaraCPF(this)" style="width:120px;text-align:center;font-size:0.95rem;"><br>
+      <script>
+      function mascaraCPF(campo) {
+        let v = campo.value.replace(/\D/g, '');
+        if (v.length > 3) v = v.slice(0,3) + '.' + v.slice(3);
+        if (v.length > 7) v = v.slice(0,7) + '.' + v.slice(7);
+        if (v.length > 11) v = v.slice(0,11) + '-' + v.slice(11,13);
+        campo.value = v.slice(0,14);
+      }
+      </script>
+      <label>RG (opcional):</label><br>
+      <input type="text" name="rg" maxlength="15" placeholder="apenas dígitos" title="Digite RG" style="width:130px;text-align:center;font-size:0.95rem;"><br>
+      <input type="submit" value="Cadastrar">
+    </form>
+    
+    <div style="margin-top:32px;"></div>
+    <h3>Pacientes Cadastrados</h3>
+    <div style="margin-bottom:12px;">
+      <label for="search">Pesquisar paciente:</label>
+      <input type="search" id="search" placeholder="Digite parte do nome..." style="padding:6px;border-radius:6px;border:1px solid #b2dfdb;" />
+    </div>
+    {% if pacientes and pacientes|length > 0 %}
+      <table id="patients-table">
+        <thead><tr><th style="width:50px;">#</th><th>Nome</th><th style="width:80px;">Idade</th><th>Telefone</th><th>CPF</th><th>RG</th><th style="width:140px;">Validação</th><th style="width:180px;">Ações</th></tr></thead>
+        <tbody>
+        {% for p in pacientes %}
+          <tr data-name="{{ p.nome | lower }}">
+            <td>{{ loop.index }}</td>
+            <td class="p-name">{{ p.nome }}</td>
+            <td>{{ p.idade }}</td>
+            <td>{{ p.telefone }}</td>
+            <td>{{ format_cpf(p.cpf) if p.cpf is defined else '' }}</td>
+            <td>{{ p.rg or '' }}</td>
+            <td>
+              {% set cpf_ok = validate_cpf(p.cpf) if p.cpf is defined else False %}
+              <span style="color: {{ 'green' if cpf_ok else 'red' }}">{{ 'CPF válido' if cpf_ok else 'CPF inválido' }}</span>
+              <br>
+              {% set rg_ok = validate_rg(p.rg) if p.rg is defined else False %}
+              <span style="color: {{ 'green' if rg_ok else 'red' }}">{{ 'RG válido' if rg_ok else 'RG inválido' }}</span>
+            </td>
+            <td>
+              <a href="{{ url_for('editar_paciente', idx=p.idx) }}">Editar</a>
+              |
+              <form method="post" action="{{ url_for('apagar_paciente', idx=p.idx) }}" style="display:inline" onsubmit="return confirm('Deseja realmente apagar este paciente? Isso removerá o cadastro permanentemente.');">
+                <button type="submit">Apagar</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <script>
+        (function(){
+          const search = document.getElementById('search');
+          const table = document.getElementById('patients-table');
+          const rows = table ? table.tBodies[0].rows : [];
+          search.addEventListener('input', function(e){
+            const q = (e.target.value || '').trim().toLowerCase();
+            for(let r of rows){
+              const name = r.getAttribute('data-name') || '';
+              r.style.display = (q === '' || name.indexOf(q) !== -1) ? '' : 'none';
+            }
+          });
+        })();
+      </script>
+    {% else %}
+      <p>Nenhum paciente cadastrado ainda.</p>
+    {% endif %}
+    <!-- Barra de atalhos inferior -->
+    <div style="margin-top:32px; padding:16px 0; border-top:1px solid #e0e0e0; display:flex; gap:18px; justify-content:center; background:rgba(255,193,7,0.04);">
+      <a href="{{ url_for('listar') }}" class="btn-atalho">Listar Pacientes</a>
+      <a href="{{ url_for('agendamento') }}" class="btn-atalho">Agendar Consulta</a>
+      <a href="{{ url_for('fila_atendimento') }}" class="btn-atalho">Ver Fila</a>
+    </div>
+    <style>
+      .btn-atalho { background:#ffc107; color:#333; padding:10px 22px; border-radius:8px; text-decoration:none; font-weight:600; box-shadow:0 2px 8px rgba(255,193,7,0.08); transition:background 0.2s; }
+      .btn-atalho:hover { background:#ff9800; color:#fff; }
+    </style>
+    <!-- Menu superior já possui navegação -->
+{% endblock %}

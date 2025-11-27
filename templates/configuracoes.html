@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Configurações{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>Configurações de Usuário</h2>
+  <form method="post">
+    <label>Nome de usuário atual:</label><br>
+    <input type="text" name="username_atual" value="{{ session.get('username') }}" readonly><br>
+    <label>Senha atual:</label><br>
+    <input type="password" name="senha_atual" required><br>
+    <label>Novo nome de usuário:</label><br>
+    <input type="text" name="novo_username"><br>
+    <label>Nova senha:</label><br>
+    <input type="password" name="nova_senha"><br>
+    <label>Confirme a nova senha:</label><br>
+    <input type="password" name="confirma_senha"><br>
+    <input type="submit" value="Salvar alterações">
+  </form>
+  <a href="/">Voltar ao menu</a>
+</div>
+{% endblock %}

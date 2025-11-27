@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Buscar Paciente{% endblock %}
+{% block content %}
+    <h2>Buscar Paciente</h2>
+    <form method="post">
+        <label>Nome:</label>
+        <input type="text" name="nome">
+        <input type="submit" value="Buscar">
+        <label style="margin-left:12px; font-weight:600;"><input type="checkbox" name="listar_todos" value="1"> Listar todos os pacientes</label>
+    </form>
+    {% if resultado is not none %}
+        <h3>Resultados:</h3>
+        {% if resultado %}
+            <ul>
+            {% for p in resultado %}
+                <li>{{ p['nome'] }} - {{ p['idade'] }} anos - {{ p['telefone'] }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p class="msg-error">Nenhum paciente encontrado.</p>
+        {% endif %}
+    {% endif %}
+    {% if pacientes_list is defined and pacientes_list %}
+        <h3>Todos os pacientes</h3>
+                <table>
+                    <thead><tr><th>Nome</th><th>Idade</th><th>Telefone</th><th>CPF</th><th>RG</th><th>Validação</th></tr></thead>
+                    <tbody>
+                        {% for p in pacientes_list %}
+                            <tr>
+                                <td>{{ p['nome'] }}</td>
+                                <td>{{ p['idade'] }}</td>
+                                <td>{{ p['telefone'] }}</td>
+                                <td>{{ format_cpf(p.get('cpf','')) }}</td>
+                                <td>{{ p.get('rg','') }}</td>
+                                <td>
+                                    {% set cpf_ok = validate_cpf(p.get('cpf','')) %}
+                                    <span style="color: {{ 'green' if cpf_ok else 'red' }}">{{ 'CPF válido' if cpf_ok else 'CPF inválido' }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+    {% endif %}
+    <a href="/">Voltar ao menu</a>
+{% endblock %}

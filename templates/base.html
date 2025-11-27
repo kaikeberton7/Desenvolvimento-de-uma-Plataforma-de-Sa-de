@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Clínica Vida+{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <style>
+        /* Top navigation */
+        .topbar {
+            width: 100%;
+            background: linear-gradient(90deg, #e0f7fa 0%, #f3e8ff 100%);
+            box-shadow: 0 2px 16px rgba(0,191,165,0.08);
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+            position: relative;
+            z-index: 2;
+
+        .topbar .inner {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            flex: 1;
+        }
+        .brand .logo {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg,#00bfa5,#00695c);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        .brand h1 { font-size: 1.05rem; margin:0; color:#004d40; }
+        .nav {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            justify-content: center;
+            flex: 2;
+        }
+        .dropdown {
+            position: relative;
+            margin: 0 0;
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .dropdown-menu {
+            min-width: 200px;
+            margin-top: 8px;
+            box-shadow: 0 12px 32px rgba(0,105,92,0.14);
+        }
+        .dropdown-menu a {
+            padding: 14px 22px;
+            font-size: 1.04rem;
+        }
+        }
+        .nav a { color: #00695c; text-decoration: none; padding: 8px 12px; border-radius: 8px; font-weight:600; }
+        .nav a:hover { background: rgba(0,105,92,0.06); }
+                .dropdown {
+                    position: relative;
+                }
+                .dropdown-toggle {
+                    cursor: pointer;
+                    position: relative;
+                    padding-right: 18px;
+                }
+                .dropdown-menu {
+                    position: absolute;
+                    left: 0;
+                    top: 100%;
+                    min-width: 180px;
+                    background: #fff;
+                    border-radius: 0 0 10px 10px;
+                    box-shadow: 0 8px 24px rgba(0,105,92,0.10);
+                    z-index: 10;
+                    display: none;
+                    flex-direction: column;
+                    animation: dropdownDown 0.22s ease;
+                }
+                .dropdown-menu a {
+                    padding: 16px 24px;
+                    color: #00695c;
+                    border-bottom: 1px solid #e0e0e0;
+                    background: none;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    gap: 12px;
+                    transition: background 0.18s, box-shadow 0.18s;
+                    font-size: 1.08rem;
+                    margin-bottom: 4px;
+                    border-radius: 6px;
+                    box-shadow: 0 2px 8px rgba(0,105,92,0.04);
+                }
+                .dropdown-menu a:last-child {
+                    border-bottom: none;
+                }
+                .dropdown-menu a:hover {
+                    background: #e0f2f1;
+                    box-shadow: 0 4px 16px rgba(0,105,92,0.10);
+                }
+                @keyframes dropdownDown {
+                    0% { opacity: 0; transform: translateY(-10px); }
+                    100% { opacity: 1; transform: translateY(0); }
+                }
+        @media (max-width:720px) {
+            .topbar .inner { padding: 10px 14px; }
+            .nav { display: none; }
+        }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #00bfa5 0%, #00695c 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+        body:before {
+            content: '';
+            position: fixed;
+            left: 0; top: 0; width: 100vw; height: 100vh;
+            background: url('https://pngimg.com/d/bamboo_PNG44.png') left bottom no-repeat;
+            background-size: 420px auto;
+            opacity: 0.13;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .container {
+            max-width: 980px;
+            margin: 48px auto;
+            background: rgba(255,255,255,0.94);
+            border-radius: 14px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.06);
+            padding: 36px 44px;
+        }
+        h1, h2, h3 {
+            color: #00695c;
+            margin: 0 0 12px 0;
+        }
+        a {
+            color: #00796b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+        th, td {
+            border: 1px solid #b2dfdb;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #b2dfdb;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 6px;
+            border-radius: 6px;
+            border: 1px solid #b2dfdb;
+            margin-bottom: 10px;
+            width: 96%;
+        }
+        input[type="submit"], button {
+            background: #00796b;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 18px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        input[type="submit"]:hover, button:hover {
+            background: #004d40;
+        }
+        /* Botões grandes */
+        .btn-large {
+            display: inline-block;
+            background: linear-gradient(180deg,#00897b,#00695c);
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            box-shadow: 0 6px 18px rgba(0,105,92,0.12);
+            transition: transform .12s ease, box-shadow .12s ease;
+            text-align: center;
+        }
+        .btn-large:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,105,92,0.14); }
+
+        /* Menu em cards */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-top: 18px;
+        }
+        .card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(250,250,250,0.95));
+            border-radius: 10px;
+            padding: 18px;
+            border: 1px solid rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 120px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+        }
+        .card h3 { margin-bottom: 12px; color: #004d40; }
+        .card a { align-self: start; }
+        .msg-success {
+            color: #388e3c;
+            font-weight: bold;
+        }
+        .msg-error {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+        ul {
+            padding-left: 18px;
+        }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <div class="topbar">
+        <div class="inner">
+            <div class="brand">
+                <div class="logo"></div>
+                <h1>Clínica Vida+</h1>
+            </div>
+            <nav class="nav">
+                <a href="/" class="dropdown-toggle"><span style="display:inline-block;vertical-align:middle;margin-right:4px;"><img src="https://img.icons8.com/fluency/24/home.png" style="width:20px;height:20px;vertical-align:middle;"></span>Início</a>
+                {% if session.get('username') %}
+                    {% if session.get('role') == 'secretaria' %}
+                        <div class="dropdown" style="position:relative;">
+                            <a href="#" class="dropdown-toggle"><span style="display:inline-block;vertical-align:middle;margin-right:4px;"><img src="https://img.icons8.com/fluency/24/user-group-man-man.png" style="width:20px;height:20px;vertical-align:middle;"></span>Pacientes &#9662;</a>
+                            <div class="dropdown-menu" style="display:none;">
+                                <a href="/cadastrar">Cadastrar</a>
+                                <a href="/listar">Listar</a>
+                                <a href="/buscar">Buscar</a>
+                                <a href="/estatisticas">Estatísticas</a>
+                            </div>
+                        </div>
+                        <div class="dropdown" style="position:relative;">
+                            <a href="#" class="dropdown-toggle"><span style="display:inline-block;vertical-align:middle;margin-right:4px;"><img src="https://img.icons8.com/fluency/24/calendar--v2.png" style="width:20px;height:20px;vertical-align:middle;"></span>Agendamento &#9662;</a>
+                            <div class="dropdown-menu" style="display:none;">
+                                <a href="/agendamento">Agendar</a>
+                                <a href="/casos_uso">Verificação de médico disponível</a>
+                            </div>
+                        </div>
+                        <div class="dropdown" style="position:relative;">
+                            <a href="#" class="dropdown-toggle"><span style="display:inline-block;vertical-align:middle;margin-right:4px;"><img src="https://img.icons8.com/fluency/24/money.png" style="width:20px;height:20px;vertical-align:middle;"></span>Pagamentos &#9662;</a>
+                            <div class="dropdown-menu" style="display:none;">
+                                <a href="/pagamentos">Gerenciar pagamentos</a>
+                            </div>
+                        </div>
+                        <div class="dropdown" style="position:relative;">
+                            <a href="#" class="dropdown-toggle"><span style="display:inline-block;vertical-align:middle;margin-right:4px;"><img src="https://img.icons8.com/fluency/24/waiting-room.png" style="width:20px;height:20px;vertical-align:middle;"></span>Fila &#9662;</a>
+                            <div class="dropdown-menu" style="display:none;">
+                                <a href="/fila">Fila de atendimento</a>
+                            </div>
+                        </div>
+                    {% elif session.get('role') == 'medico' %}
+                        <div class="dropdown" style="position:relative;">
+                            <a href="#" class="dropdown-toggle"><span style="display:inline-block;vertical-align:middle;margin-right:4px;"><img src="https://img.icons8.com/fluency/24/user-group-man-man.png" style="width:20px;height:20px;vertical-align:middle;"></span>Pacientes &#9662;</a>
+                            <div class="dropdown-menu" style="display:none;">
+                                <a href="/listar">Listar</a>
+                                <a href="/buscar">Buscar</a>
+                                <a href="/estatisticas">Estatísticas</a>
+                                <a href="/evolucao">Evolução</a>
+                            </div>
+                        </div>
+                        <div class="dropdown" style="position:relative;">
+                            <a href="#" class="dropdown-toggle"><span style="display:inline-block;vertical-align:middle;margin-right:4px;">
+                                <svg width="20" height="20" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;">
+                                    <rect x="6" y="6" width="20" height="20" rx="5" fill="#fff"/>
+                                    <rect x="10" y="10" width="12" height="2.5" rx="1.2" fill="#00bfa5"/>
+                                    <rect x="10" y="15" width="8" height="2.5" rx="1.2" fill="#00bfa5"/>
+                                    <rect x="10" y="20" width="6" height="2.5" rx="1.2" fill="#00bfa5"/>
+                                </svg>
+                            </span>Receitas &#9662;</a>
+                            <div class="dropdown-menu" style="display:none;">
+                                <a href="/receitas">Receitas</a>
+                                <a href="/receita/novo">Nova Receita</a>
+                            </div>
+                        </div>
+                        <div class="dropdown" style="position:relative;">
+                            <a href="#" class="dropdown-toggle"><span style="display:inline-block;vertical-align:middle;margin-right:4px;"><img src="https://img.icons8.com/fluency/24/calendar--v2.png" style="width:20px;height:20px;vertical-align:middle;"></span>Agendamento &#9662;</a>
+                            <div class="dropdown-menu" style="display:none;">
+                                <a href="/agendamento">Agendar</a>
+                                <a href="/casos_uso">Verificação de médico disponível</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="dropdown" style="position:relative;">
+                            <a href="#" class="dropdown-toggle">Pacientes</a>
+                            <div class="dropdown-menu" style="display:none;">
+                                <a href="/listar">Listar</a>
+                                <a href="/buscar">Buscar</a>
+                                <a href="/estatisticas">Estatísticas</a>
+                            </div>
+                        </div>
+                        <div class="dropdown" style="position:relative;">
+                            <a href="#" class="dropdown-toggle">Agendamento</a>
+                            <div class="dropdown-menu" style="display:none;">
+                                <a href="/agendamento">Agendar</a>
+                                <a href="/casos_uso">Verificação de médico disponível</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="dropdown" style="position:relative;">
+                        <a href="{{ url_for('configuracoes') }}" class="dropdown-toggle"><span style="display:inline-block;vertical-align:middle;margin-right:4px;"><img src="https://img.icons8.com/fluency/24/settings.png" style="width:20px;height:20px;vertical-align:middle;"></span>Configurações &#9662;</a>
+                        <div class="dropdown-menu" style="display:none; min-width:160px;">
+                            <a href="{{ url_for('configuracoes') }}">Configuração do Usuário</a>
+                            <a href="/sobre">Sobre</a>
+                        </div>
+                    </div>
+                    <span style="margin-left:12px;font-weight:600;color:#004d40;">Olá, {{ session.get('username') }} ({{ session.get('role') }})</span>
+                    <a href="{{ url_for('logout') }}">Sair</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="dropdown-toggle"><span style="display:inline-block;vertical-align:middle;margin-right:4px;">
+                        <svg width="20" height="20" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;">
+                            <circle cx="16" cy="12" r="5" fill="#00bfa5"/>
+                            <rect x="8" y="20" width="16" height="6" rx="3" fill="#00bfa5"/>
+                            <rect x="14" y="10" width="4" height="2" rx="1" fill="#fff"/>
+                        </svg>
+                    </span>Login</a>
+                {% endif %}
+            </nav>
+            <script>
+            // Dropdown interatividade para todos
+            document.addEventListener('DOMContentLoaded', function() {
+                var dropdowns = document.querySelectorAll('.dropdown');
+                dropdowns.forEach(function(dd) {
+                    var toggle = dd.querySelector('.dropdown-toggle');
+                    var menu = dd.querySelector('.dropdown-menu');
+                    toggle.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // Fecha outros abertos
+                        document.querySelectorAll('.dropdown-menu').forEach(function(m) { if(m !== menu) m.style.display = 'none'; });
+                        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+                        if(menu.style.display === 'block') {
+                            menu.style.animation = 'dropdownDown 0.22s ease';
+                        }
+                    });
+                });
+                document.addEventListener('click', function() {
+                    document.querySelectorAll('.dropdown-menu').forEach(function(menu) {
+                        menu.style.display = 'none';
+                    });
+                });
+            });
+            </script>
+        </div>
+    </div>
+
+    <div class="container">
+                {# Removido para evitar duplicidade de mensagens. Flash messages são exibidas apenas nos templates específicos. #}
+                {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

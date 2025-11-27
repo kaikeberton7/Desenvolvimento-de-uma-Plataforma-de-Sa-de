@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Evolução dos Pacientes{% endblock %}
+{% block content %}
+<h1>Evolução dos Pacientes</h1>
+<p>Selecione um paciente para visualizar ou anotar situações clínicas.</p>
+<form method="get" action="">
+    <label for="paciente">Paciente:</label>
+    <select name="paciente" id="paciente">
+        <option value="">-- Escolha --</option>
+        {% for p in pacientes %}
+            <option value="{{ loop.index0 }}" {% if paciente_idx is not none and paciente_idx|string == loop.index0|string %}selected{% endif %}>{{ p.nome }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Selecionar</button>
+</form>
+{% if paciente %}
+<hr>
+<h2>{{ paciente.nome }}</h2>
+<form method="post" action="">
+    <label for="nova_situacao">Nova situação:</label><br>
+    <input type="text" name="nova_situacao" id="nova_situacao" style="width:60%">
+    <button type="submit" name="adicionar">Salvar situação</button>
+</form>
+<h3>Situações anotadas:</h3>
+<ul>
+    {% for situacao in evolucoes %}
+        <li>
+            {% set idx = loop.index0 %}
+            {% if edit_idx is defined and edit_idx == idx %}
+                <form method="post" style="display:inline;">
+                    <input type="hidden" name="edit_idx" value="{{ idx }}">
+                    <input type="text" name="edit_text" value="{{ edit_text }}" style="width:60%">
+                    <button type="submit" name="salvar_edicao">Salvar</button>
+                </form>
+            {% else %}
+                {{ situacao }}
+                <form method="post" style="display:inline;">
+                    <input type="hidden" name="edit_idx" value="{{ idx }}">
+                    <button type="submit" name="editar">Editar</button>
+                    <button type="submit" name="apagar" onclick="return confirm('Apagar esta situação?')">Apagar</button>
+                </form>
+            {% endif %}
+        </li>
+    {% else %}
+        <li>Nenhuma situação registrada.</li>
+    {% endfor %}
+</ul>
+{% if msg %}<div class="msg-success">{{ msg }}</div>{% endif %}
+{% endif %}
+{% endblock %}

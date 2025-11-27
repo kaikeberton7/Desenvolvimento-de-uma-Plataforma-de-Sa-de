@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Vereficação de indisponibilidade do médico{% endblock %}
+{% block content %}
+    <h2>Vereficação de indisponibilidade do médico</h2>
+        {% if session.get('role') == 'medico' %}
+            <div class="card">
+                <h4>Adicionar indisponibilidade</h4>
+                <form method="post">
+                    <label>Data:</label><br>
+                    <input type="date" name="data_disp" required><br>
+                    <label>Início (HH:MM):</label><br>
+                    <input type="time" name="inicio" required><br>
+                    <label>Fim (HH:MM):</label><br>
+                    <input type="time" name="fim" required><br>
+                    <input type="submit" name="criar_disp" value="Adicionar">
+                </form>
+            </div>
+        {% endif %}
+        {% if session.get('role') == 'medico' %}
+            <h4>Minhas indisponibilidades</h4>
+            {% set minhas = disponibilidades | selectattr('medico', 'equalto', session.get('username')) | list %}
+            {% if minhas %}
+                <table>
+                    <thead><tr><th>ID</th><th>Data</th><th>Início</th><th>Fim</th><th>Ações</th></tr></thead>
+                    <tbody>
+                    {% for d in minhas %}
+                        <tr>
+                            <td>{{ d.id }}</td>
+                            <td>{{ d.data | default('') | replace('-', '/') | safe }} </td>
+                            <td>{{ d.inicio }}</td>
+                            <td>{{ d.fim }}</td>
+                            <td>
+                                <form method="post" style="display:inline" onsubmit="return confirm('Apagar indisponibilidade?');">
+                                    <button name="apagar_disp" value="{{ d.id }}">Apagar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Nenhuma indisponibilidade registrada.</p>
+            {% endif %}
+        {% else %}
+            <h4>Horários indisponíveis dos médicos</h4>
+            {% if disponibilidades %}
+                <table>
+                    <thead><tr><th>ID</th><th>Data</th><th>Início</th><th>Fim</th><th>Médico</th></tr></thead>
+                    <tbody>
+                    {% for d in disponibilidades %}
+                        <tr>
+                            <td>{{ d.id }}</td>
+                            <td>{{ d.data | default('') | replace('-', '/') | safe }} </td>
+                            <td>{{ d.inicio }}</td>
+                            <td>{{ d.fim }}</td>
+                            <td>{{ d.medico }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Nenhuma indisponibilidade registrada.</p>
+            {% endif %}
+        {% endif %}
+
+        
+    
+    <a href="/">Voltar ao menu</a>
+{% endblock %}

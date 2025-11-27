@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <h2>Receitas</h2>
+  {% if receitas|length == 0 %}
+    <p>Não há receitas registradas.</p>
+  {% else %}
+    <table>
+      <thead>
+        <tr><th>#</th><th>Paciente</th><th>Médico</th><th>Data</th><th>Ações</th></tr>
+      </thead>
+      <tbody>
+        {% for r in receitas %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ r.paciente }}</td>
+          <td>{{ r.medico }}</td>
+          <td>{{ format_datetime(r.data) }}</td>
+          <td>
+            <a href="{{ url_for('imprimir_receita', idx=loop.index0) }}">Imprimir</a>
+            <form method="post" action="{{ url_for('apagar_receita', idx=loop.index0) }}" style="display:inline" onsubmit="return confirm('Deseja apagar esta receita?');">
+              <button type="submit" class="btn btn-danger">Apagar</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+  <div class="form-actions">
+    <a href="{{ url_for('nova_receita') }}" class="btn">Nova Receita</a>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">Voltar</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Pagamentos{% endblock %}
+{% block content %}
+    <h2>Pagamentos dos Pacientes</h2>
+    <form method="get" action="/pagamentos" style="margin-bottom: 16px;">
+        <input type="text" name="busca" value="{{ busca_nome }}" placeholder="Buscar paciente pelo nome">
+        <input type="text" name="busca_doc" value="{{ busca_doc }}" placeholder="Buscar por CPF ou RG">
+        <select name="busca_status">
+            <option value="">-- Status --</option>
+            <option value="Em dia" {% if busca_status == 'Em dia' %}selected{% endif %}>Em dia</option>
+            <option value="Pendente" {% if busca_status == 'Pendente' %}selected{% endif %}>Pendente</option>
+            <option value="Atrasado" {% if busca_status == 'Atrasado' %}selected{% endif %}>Atrasado</option>
+            <option value="Plano" {% if busca_status == 'Plano' %}selected{% endif %}>Plano</option>
+        </select>
+        <button type="submit">Pesquisar</button>
+    </form>
+    {% if pacientes %}
+        <table>
+            <tr><th>Nome</th><th>Status de Pagamento</th><th>Ação</th></tr>
+            {% for p in pacientes %}
+                <tr>
+                    <td>{{ p['nome'] }}</td>
+                    <td>
+                        {% if p['pagamento_em_dia'] == 'Em dia' %}
+                            <span style="color: green; font-weight: bold;">Em dia</span>
+                        {% elif p['pagamento_em_dia'] == 'Pendente' %}
+                            <span style="color: orange; font-weight: bold;">Pendente</span>
+                        {% elif p['pagamento_em_dia'] == 'Atrasado' %}
+                            <span style="color: red; font-weight: bold;">Atrasado</span>
+                        {% elif p['pagamento_em_dia'] == 'Plano' %}
+                            <span style="color: green; font-weight: bold;">Plano</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form method="post" action="/pagamentos/editar/{{ loop.index0 }}">
+                            <select name="novo_status">
+                                <option value="Em dia" {% if p['pagamento_em_dia'] == 'Em dia' %}selected{% endif %}>Em dia</option>
+                                <option value="Pendente" {% if p['pagamento_em_dia'] == 'Pendente' %}selected{% endif %}>Pendente</option>
+                                <option value="Atrasado" {% if p['pagamento_em_dia'] == 'Atrasado' %}selected{% endif %}>Atrasado</option>
+                                <option value="Plano" {% if p['pagamento_em_dia'] == 'Plano' %}selected{% endif %}>Plano</option>
+                            </select>
+                            <button type="submit">Salvar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Nenhum paciente encontrado.</p>
+    {% endif %}
+    <!-- Menu superior já possui navegação -->
+{% endblock %}

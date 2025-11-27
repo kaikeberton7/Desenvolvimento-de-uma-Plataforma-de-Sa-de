@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Listar Pacientes{% endblock %}
+{% block content %}
+    <h2>Todos os Pacientes</h2>
+    {% if pacientes %}
+        <table>
+            <tr><th>Nome</th><th>Idade</th><th>Telefone</th><th>CPF</th><th>RG</th><th>Validação</th><th>Agendamentos</th><th>Pagamento</th></tr>
+            {% for p in pacientes %}
+                <tr>
+                        <td>{{ p['nome'] }}</td>
+                        <td>{{ p['idade'] }}</td>
+                        <td>{{ p['telefone'] }}</td>
+                        <td>{{ format_cpf(p.get('cpf','')) }}</td>
+                        <td>{{ p.get('rg','') }}</td>
+                        <td>
+                            {% set cpf_valid = validate_cpf(p.get('cpf','')) %}
+                            {% set rg_valid = validate_rg(p.get('rg','')) %}
+                            <div><strong>CPF:</strong> <span style="color: {{ 'green' if cpf_valid else 'red' }}">{{ 'Válido' if cpf_valid else 'Inválido' }}</span></div>
+                            <div><strong>RG:</strong> <span style="color: {{ 'green' if rg_valid else 'orange' }}">{{ 'Provável Válido' if rg_valid else 'Provável Inválido' }}</span></div>
+                        </td>
+                        <td>
+                            {% if p.agendamentos %}
+                              <ul>
+                                {% for d in p.agendamentos %}
+                                  <li>{{ format_datetime(d) }}</li>
+                                {% endfor %}
+                              </ul>
+                            {% else %}
+                              -
+                            {% endif %}
+                        </td>
+                        <td>
+                          {% if p['pagamento_em_dia'] == 'Em dia' %}
+                            <span style="color: green; font-weight: bold;">Em dia</span>
+                          {% elif p['pagamento_em_dia'] == 'Pendente' %}
+                            <span style="color: orange; font-weight: bold;">Pendente</span>
+                          {% elif p['pagamento_em_dia'] == 'Atrasado' %}
+                            <span style="color: red; font-weight: bold;">Atrasado</span>
+                          {% elif p['pagamento_em_dia'] == 'Plano' %}
+                            <span style="color: green; font-weight: bold;">Plano</span>
+                          {% else %}
+                            <span>-</span>
+                          {% endif %}
+                        </td>
+                    </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p class="msg-error">Nenhum paciente cadastrado.</p>
+    {% endif %}
+    <!-- Barra de atalhos inferior -->
+    <div style="margin-top:32px; padding:16px 0; border-top:1px solid #e0e0e0; display:flex; gap:18px; justify-content:center; background:rgba(76,175,80,0.04);">
+      <a href="{{ url_for('cadastrar') }}" class="btn-atalho">Cadastrar Paciente</a>
+      <a href="{{ url_for('agendamento') }}" class="btn-atalho">Agendar Consulta</a>
+      <a href="{{ url_for('fila_atendimento') }}" class="btn-atalho">Ver Fila</a>
+    </div>
+    <style>
+      .btn-atalho { background:#4caf50; color:#fff; padding:10px 22px; border-radius:8px; text-decoration:none; font-weight:600; box-shadow:0 2px 8px rgba(76,175,80,0.08); transition:background 0.2s; }
+      .btn-atalho:hover { background:#388e3c; }
+    </style>
+    <!-- Menu superior já possui navegação -->
+{% endblock %}

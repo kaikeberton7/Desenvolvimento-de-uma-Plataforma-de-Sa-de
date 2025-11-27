@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% block title %}SISTEMA CLÍNICA VIDA+{% endblock %}
+{% block content %}
+    <h1 style="font-size:2.2rem; color:#00695c; text-align:center; margin-bottom:18px;">Bem-vindo à Clínica Vida+</h1>
+    {% if not session.get('username') %}
+    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:340px;">
+        <div style="background:linear-gradient(135deg,#e8f5f2 0%,#ffffff 40%,#f3e8ff 100%); border-radius:18px; box-shadow:0 8px 40px rgba(0,0,0,0.08); padding:38px 44px; max-width:480px; text-align:center;">
+            <div style="margin-bottom:18px;">
+                <img src="https://img.icons8.com/color/96/000000/hospital-3.png" alt="Clínica" style="width:72px; height:72px; border-radius:16px; box-shadow:0 4px 18px rgba(0,105,92,0.10);">
+            </div>
+            <h2 style="color:#00796b; margin-bottom:10px;">Sistema de Gestão Clínica</h2>
+            <p style="color:#444; font-size:1.08rem; margin-bottom:18px;">Organize pacientes, agendamentos, receitas e pagamentos de forma simples e segura.<br>Faça login para acessar todas as funcionalidades.</p>
+            <a href="/login" class="btn-large" style="margin-top:18px; display:inline-block;">Entrar no sistema</a>
+        </div>
+        <div style="margin-top:38px; color:#004d40; font-size:1.05rem; text-align:center; max-width:480px;">
+            <span style="font-weight:600;">Clínica Vida+ &mdash; Cuidando de você com tecnologia.</span>
+        </div>
+    </div>
+    {% else %}
+        {% if session.get('role') == 'medico' %}
+        <p style="font-size:1.2rem; color:#00695c; font-weight:500; margin-bottom:18px;">Painel do Médico</p>
+        <div class="atalhos-blocos" style="display:flex; flex-wrap:wrap; gap:24px; justify-content:center; margin-bottom:36px;">
+            <!-- Atalhos do médico -->
+            <div class="atalho-bloco">
+                <div class="atalho-icone" style="width:54px; height:54px; border-radius:50%; background:linear-gradient(135deg,#00bfa5,#00695c); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(0,191,165,0.12); margin-bottom:8px;">
+                    <!-- Ícone de receita: símbolo de folha/prescrição -->
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="6" y="6" width="20" height="20" rx="5" fill="#fff"/><rect x="10" y="10" width="12" height="2.5" rx="1.2" fill="#00bfa5"/><rect x="10" y="15" width="8" height="2.5" rx="1.2" fill="#00bfa5"/><rect x="10" y="20" width="6" height="2.5" rx="1.2" fill="#00bfa5"/></svg>
+                </div>
+                <div class="atalho-titulo">Receitas</div>
+                <div class="atalho-desc">Visualize todas as receitas cadastradas.</div>
+                <a href="/receitas" class="atalho-btn">Receitas</a>
+            </div>
+            <div class="atalho-bloco">
+                <div class="atalho-icone" style="width:54px; height:54px; border-radius:50%; background:linear-gradient(135deg,#3f51b5,#2196f3); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(33,150,243,0.12); margin-bottom:8px;">
+                    <!-- Ícone de nova receita: símbolo de + e folha -->
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="6" y="6" width="20" height="20" rx="5" fill="#fff"/><rect x="10" y="10" width="12" height="2.5" rx="1.2" fill="#2196f3"/><rect x="10" y="15" width="8" height="2.5" rx="1.2" fill="#2196f3"/><rect x="10" y="20" width="6" height="2.5" rx="1.2" fill="#2196f3"/><circle cx="24" cy="24" r="6" fill="#2196f3"/><rect x="22.5" y="23" width="3" height="1.5" rx="0.75" fill="#fff"/><rect x="23.25" y="22.25" width="1.5" height="3" rx="0.75" fill="#fff"/></svg>
+                </div>
+                <div class="atalho-titulo">Nova Receita</div>
+                <div class="atalho-desc">Crie uma nova receita para um paciente.</div>
+                <a href="/receita/novo" class="atalho-btn">Nova Receita</a>
+            </div>
+            <div class="atalho-bloco">
+                <div class="atalho-icone" style="width:54px; height:54px; border-radius:50%; background:linear-gradient(135deg,#ab47bc,#8e24aa); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(171,71,188,0.12); margin-bottom:8px;">
+                    <!-- Ícone de evolução: gráfico de linha -->
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="6" y="6" width="20" height="20" rx="5" fill="#fff"/><polyline points="10,22 14,16 18,20 22,10" fill="none" stroke="#8e24aa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="atalho-titulo">Evolução dos Pacientes</div>
+                <div class="atalho-desc">Anote e edite situações clínicas dos pacientes.</div>
+                <a href="/evolucao" class="atalho-btn">Evolução</a>
+            </div>
+            <!-- Atalhos da secretaria também aparecem para o médico -->
+            <div class="atalho-bloco">
+                <div class="atalho-icone"><img src="https://img.icons8.com/fluency/48/calendar--v2.png" alt="Agendar"></div>
+                <div class="atalho-titulo">Agendar Consulta</div>
+                <div class="atalho-desc">Marque uma consulta para um paciente cadastrado.</div>
+                <a href="{{ url_for('agendamento') }}" class="atalho-btn">Agendar</a>
+            </div>
+            <div class="atalho-bloco">
+                <div class="atalho-icone"><img src="https://img.icons8.com/fluency/48/list.png" alt="Listar"></div>
+                <div class="atalho-titulo">Listar Pacientes</div>
+                <div class="atalho-desc">Veja todos os pacientes cadastrados.</div>
+                <a href="{{ url_for('listar') }}" class="atalho-btn">Listar</a>
+            </div>
+        </div>
+        <style>
+            .atalhos-blocos { margin-bottom:36px; }
+            .atalho-bloco {
+                background: #fff;
+                border-radius: 14px;
+                box-shadow: 0 4px 18px rgba(0,191,165,0.08);
+                padding: 22px 28px;
+                min-width: 220px;
+                max-width: 260px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                transition: box-shadow 0.2s, transform 0.2s;
+            }
+            .atalho-bloco:hover {
+                box-shadow: 0 8px 32px rgba(0,191,165,0.16);
+                transform: translateY(-2px) scale(1.03);
+            }
+            .atalho-icone img { width:48px; height:48px; margin-bottom:6px; }
+            .atalho-titulo { font-size:1.08rem; font-weight:600; color:#00695c; margin-bottom:2px; }
+            .atalho-desc { font-size:0.98rem; color:#444; margin-bottom:8px; text-align:center; }
+            .atalho-btn {
+                background:#00bfa5;
+                color:#fff;
+                padding:8px 18px;
+                border-radius:8px;
+                text-decoration:none;
+                font-weight:600;
+                box-shadow:0 2px 8px rgba(0,191,165,0.08);
+                transition:background 0.2s;
+            }
+            .atalho-btn:hover { background:#00695c; }
+        </style>
+        {% elif session.get('role') == 'secretaria' %}
+        <p style="font-size:1.2rem; color:#00695c; font-weight:500; margin-bottom:18px;">Painel da Secretaria</p>
+        <div class="atalhos-blocos" style="display:flex; flex-wrap:wrap; gap:24px; justify-content:center; margin-bottom:36px;">
+            <div class="atalho-bloco">
+                <div class="atalho-icone"><img src="https://img.icons8.com/fluency/48/add-user-group-man-man.png" alt="Cadastrar"></div>
+                <div class="atalho-titulo">Cadastrar Paciente</div>
+                <div class="atalho-desc">Adicione um novo paciente ao sistema.</div>
+                <a href="{{ url_for('cadastrar') }}" class="atalho-btn">Cadastrar</a>
+            </div>
+            <div class="atalho-bloco">
+                <div class="atalho-icone"><img src="https://img.icons8.com/fluency/48/calendar--v2.png" alt="Agendar"></div>
+                <div class="atalho-titulo">Agendar Consulta</div>
+                <div class="atalho-desc">Marque uma consulta para um paciente cadastrado.</div>
+                <a href="{{ url_for('agendamento') }}" class="atalho-btn">Agendar</a>
+            </div>
+            <div class="atalho-bloco">
+                <div class="atalho-icone"><img src="https://img.icons8.com/fluency/48/waiting-room.png" alt="Fila"></div>
+                <div class="atalho-titulo">Ver Fila</div>
+                <div class="atalho-desc">Veja os pacientes aguardando atendimento.</div>
+                <a href="{{ url_for('fila_atendimento') }}" class="atalho-btn">Fila de Atendimento</a>
+            </div>
+            <div class="atalho-bloco">
+                <div class="atalho-icone"><img src="https://img.icons8.com/fluency/48/list.png" alt="Listar"></div>
+                <div class="atalho-titulo">Listar Pacientes</div>
+                <div class="atalho-desc">Veja todos os pacientes cadastrados.</div>
+                <a href="{{ url_for('listar') }}" class="atalho-btn">Listar</a>
+            </div>
+        </div>
+        <style>
+            .atalhos-blocos { margin-bottom:36px; }
+            .atalho-bloco {
+                background: #fff;
+                border-radius: 14px;
+                box-shadow: 0 4px 18px rgba(0,191,165,0.08);
+                padding: 22px 28px;
+                min-width: 220px;
+                max-width: 260px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                transition: box-shadow 0.2s, transform 0.2s;
+            }
+            .atalho-bloco:hover {
+                box-shadow: 0 8px 32px rgba(0,191,165,0.16);
+                transform: translateY(-2px) scale(1.03);
+            }
+            .atalho-icone img { width:48px; height:48px; margin-bottom:6px; }
+            .atalho-titulo { font-size:1.08rem; font-weight:600; color:#00695c; margin-bottom:2px; }
+            .atalho-desc { font-size:0.98rem; color:#444; margin-bottom:8px; text-align:center; }
+            .atalho-btn {
+                background:#00bfa5;
+                color:#fff;
+                padding:8px 18px;
+                border-radius:8px;
+                text-decoration:none;
+                font-weight:600;
+                box-shadow:0 2px 8px rgba(0,191,165,0.08);
+                transition:background 0.2s;
+            }
+            .atalho-btn:hover { background:#00695c; }
+        </style>
+        {% endif %}
+    {% endif %}
+{% endblock %}

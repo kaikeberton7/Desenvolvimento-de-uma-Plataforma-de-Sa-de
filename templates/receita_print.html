@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <div class="print-area">
+    <h2>Receita</h2>
+    <p><strong>Paciente:</strong> {{ receita.paciente }}</p>
+    <p><strong>Médico:</strong> {{ receita.medico }}</p>
+    <p><strong>Data:</strong> {{ format_datetime(receita.data) }}</p>
+    <hr />
+    <pre style="white-space:pre-wrap;">{{ receita.conteudo }}</pre>
+  </div>
+  <div class="form-actions">
+    <button onclick="window.print()" class="btn">Imprimir</button>
+    <a href="{{ url_for('listar_receitas') }}" class="btn btn-secondary">Voltar</a>
+  </div>
+</div>
+{% endblock %}

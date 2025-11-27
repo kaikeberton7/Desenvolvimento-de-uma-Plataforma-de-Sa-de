@@ -1,0 +1,15 @@
+{
+  "pacientes": [],
+  "fila": [],
+  "agendamentos": [],
+  "receitas": [],
+  "disponibilidades": [
+    {
+      "id": 1,
+      "data": "2025-11-26",
+      "inicio": "18:52",
+      "fim": "19:52",
+      "medico": "medico"
+    }
+  ]
+}

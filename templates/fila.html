@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Fila de Atendimento{% endblock %}
+{% block content %}
+    <h2>Fila de Atendimento</h2>
+    <form method="post">
+        <label>Nome:</label>
+        <input type="text" name="nome" required {% if fila|length >= 3 %}disabled{% endif %}>
+        <label>CPF (apenas números, até 11 dígitos):</label>
+        <input type="text" name="cpf" maxlength="11" pattern="\d{1,11}" inputmode="numeric" title="Digite até 11 dígitos numéricos" placeholder="Só números" required {% if fila|length >= 3 %}disabled{% endif %}>
+        <label>Tipo de consulta:</label>
+        <select name="tipo" {% if fila|length >= 3 %}disabled{% endif %}>
+            <option value="normal">Normal</option>
+            <option value="emergencia">Emergência</option>
+        </select>
+        <input type="submit" name="inserir" value="Inserir na fila" {% if fila|length >= 3 %}disabled{% endif %}>
+    </form>
+
+    <div style="margin-top:10px; display:flex; gap:8px;">
+        <form method="post">
+            <input type="hidden" name="remover_and_next" value="1">
+            <input type="submit" value="Atender e ver próximo">
+        </form>
+    </div>
+    {% if mensagem %}<p class="msg-error">{{ mensagem }}</p>{% endif %}
+    {% if fila|length >= 3 %}
+        <p class="msg-error">Fila cheia (máx 3 pessoas).</p>
+    {% endif %}
+    <h3>Pacientes na fila:</h3>
+    {% if fila %}
+        <style>
+            .item-fila { padding:4px; margin-bottom:2px; }
+            .item-emergencia { background:#ffdddd; color:#b30000; font-weight:bold; border:1px solid #b30000; }
+        </style>
+        <ul>
+        {% for p in fila %}
+            <li class="item-fila{% if p['emergencia'] %} item-emergencia{% endif %}">
+                <b>#{{ loop.index }}:</b> {{ p['nome'] }} - CPF: {{ p['cpf_display'] }}
+                {% if p['emergencia'] %}<span style="margin-left:8px; color:#b30000; font-weight:bold;">[EMERGÊNCIA]</span>{% else %}<span style="margin-left:8px; color:#333;">[Normal]</span>{% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p class="msg-error">Fila vazia.</p>
+    {% endif %}
+    <!-- Barra de atalhos inferior -->
+    <div style="margin-top:32px; padding:16px 0; border-top:1px solid #e0e0e0; display:flex; gap:18px; justify-content:center; background:rgba(0,121,107,0.04);">
+        <a href="{{ url_for('cadastrar') }}" class="btn-atalho">Cadastrar Paciente</a>
+        <a href="{{ url_for('agendamento') }}" class="btn-atalho">Agendar Consulta</a>
+        <a href="{{ url_for('listar') }}" class="btn-atalho">Listar Pacientes</a>
+    </div>
+    <style>
+        .btn-atalho { background:#00bfa5; color:#fff; padding:10px 22px; border-radius:8px; text-decoration:none; font-weight:600; box-shadow:0 2px 8px rgba(0,191,165,0.08); transition:background 0.2s; }
+        .btn-atalho:hover { background:#00695c; }
+    </style>
+    <!-- Menu superior já possui navegação -->
+{% endblock %}

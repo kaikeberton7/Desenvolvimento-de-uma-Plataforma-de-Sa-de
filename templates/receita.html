@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <h2>Nova Receita</h2>
+  {% if error %}
+  <div class="alert alert-error">{{ error }}</div>
+  {% endif %}
+  {% if pacientes|length == 0 %}
+    <p>Nenhum paciente cadastrado. Cadastre um paciente antes de criar uma receita.</p>
+  {% else %}
+  <form method="post">
+    <div class="form-group">
+      <label for="paciente">Paciente</label>
+      <select name="paciente" id="paciente" required>
+        <option value="">-- selecione --</option>
+        {% for p in pacientes %}
+        <option value="{{ loop.index0 }}">{{ p.nome }}{% if p.get('cpf') %} - {{ p.cpf }}{% endif %}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="conteudo">Prescrição</label>
+      <textarea name="conteudo" id="conteudo" rows="6" required></textarea>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn">Salvar e Imprimir</button>
+      <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

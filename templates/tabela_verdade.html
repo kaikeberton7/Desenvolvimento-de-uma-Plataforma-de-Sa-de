@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Tabela Verdade{% endblock %}
+{% block content %}
+    <h2>Tabela Verdade - Consulta Normal e Emergência</h2>
+    <table>
+        <tr>
+            <th>A</th><th>B</th><th>C</th><th>D</th>
+            <th>Consulta Normal</th>
+            <th>Emergência</th>
+        </tr>
+        {% for linha in tabela %}
+        <tr>
+            <td>{{ linha['A'] }}</td>
+            <td>{{ linha['B'] }}</td>
+            <td>{{ linha['C'] }}</td>
+            <td>{{ linha['D'] }}</td>
+            <td>{{ 'Sim' if linha['normal'] else 'Não' }}</td>
+            <td>{{ 'Sim' if linha['emergencia'] else 'Não' }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p><b>Consulta Normal:</b> {{ total_normal }} situações atendidas.</p>
+    <p><b>Emergência:</b> {{ total_emergencia }} situações atendidas.</p>
+    <a href="/">Voltar ao menu</a>
+{% endblock %}

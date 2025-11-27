@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Sobre o Sistema{% endblock %}
+{% block content %}
+<div style="max-width:700px; margin:32px auto; background:linear-gradient(135deg,#e8f5e9 0%,#ffffff 60%,#e3f2fd 100%); border-radius:18px; box-shadow:0 8px 40px rgba(0,105,92,0.10); padding:38px 44px;">
+    <div style="display:flex; align-items:center; gap:18px; margin-bottom:18px;">
+        <img src="https://img.icons8.com/fluency/64/info.png" alt="Sobre" style="width:54px; height:54px; border-radius:12px; box-shadow:0 4px 18px rgba(0,105,92,0.10);">
+        <h2 style="color:#00695c; font-size:2rem; margin:0;">Sobre o Sistema</h2>
+    </div>
+    <p style="margin-bottom:24px; color:#444; font-size:1.08rem;">Aqui você encontra uma explicação clara sobre cada função do sistema da Clínica Vida+.</p>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+        <div style="background:#fff; border-radius:12px; box-shadow:0 2px 12px rgba(0,105,92,0.07); padding:18px;">
+            <h3 style="color:#00796b; margin-bottom:8px;">Pacientes</h3>
+            <p style="color:#444;">Cadastre, busque, liste e edite informações dos pacientes. Médicos podem acompanhar a evolução clínica.</p>
+        </div>
+        <div style="background:#fff; border-radius:12px; box-shadow:0 2px 12px rgba(0,105,92,0.07); padding:18px;">
+            <h3 style="color:#00796b; margin-bottom:8px;">Agendamento</h3>
+            <p style="color:#444;">Agende consultas, veja horários disponíveis e gerencie compromissos dos pacientes.</p>
+        </div>
+        <div style="background:#fff; border-radius:12px; box-shadow:0 2px 12px rgba(0,105,92,0.07); padding:18px;">
+            <h3 style="color:#00796b; margin-bottom:8px;">Receitas</h3>
+            <p style="color:#444;">Médicos podem criar, visualizar e imprimir prescrições para pacientes.</p>
+        </div>
+        <div style="background:#fff; border-radius:12px; box-shadow:0 2px 12px rgba(0,105,92,0.07); padding:18px;">
+            <h3 style="color:#00796b; margin-bottom:8px;">Evolução</h3>
+            <p style="color:#444;">Médicos registram e acompanham situações clínicas dos pacientes ao longo do tempo.</p>
+        </div>
+        <div style="background:#fff; border-radius:12px; box-shadow:0 2px 12px rgba(0,105,92,0.07); padding:18px;">
+            <h3 style="color:#00796b; margin-bottom:8px;">Pagamentos</h3>
+            <p style="color:#444;">Secretária gerencia pagamentos e pendências financeiras dos pacientes.</p>
+        </div>
+        <div style="background:#fff; border-radius:12px; box-shadow:0 2px 12px rgba(0,105,92,0.07); padding:18px;">
+            <h3 style="color:#00796b; margin-bottom:8px;">Fila de Atendimento</h3>
+            <p style="color:#444;">Acompanhe a ordem de atendimento dos pacientes na clínica.</p>
+        </div>
+        <div style="background:#fff; border-radius:12px; box-shadow:0 2px 12px rgba(0,105,92,0.07); padding:18px;">
+            <h3 style="color:#00796b; margin-bottom:8px;">Configuração do Usuário</h3>
+            <p style="color:#444;">Altere seu nome de usuário, senha e preferências pessoais.</p>
+        </div>
+        <div style="background:#fff; border-radius:12px; box-shadow:0 2px 12px rgba(0,105,92,0.07); padding:18px;">
+            <h3 style="color:#00796b; margin-bottom:8px;">Login</h3>
+            <p style="color:#444;">Acesse o sistema com seu usuário e senha para utilizar todas as funcionalidades.</p>
+        </div>
+    </div>
+    <div style="margin-top:32px; color:#888; font-size:1rem; text-align:center;">
+        Qualquer dúvida, procure a equipe da clínica ou consulte o manual do sistema.<br>
+        <span style="font-size:0.95rem;">Clínica Vida+ &mdash; Cuidando de você com tecnologia.</span>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{
+  "pessoa 1": {
+    "password": "1234",
+    "role": "secretaria"
+  },
+  "pessoa 2": {
+    "password": "1234",
+    "role": "medico"
+  }
+}
